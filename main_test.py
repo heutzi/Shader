@@ -28,31 +28,16 @@ quad_buffer = context.buffer(data=array('f', [
     +1., -1., +1., +1.,  # right - bottom
 ]))
 
-vert_shader = """
-    #version 330 core
 
-    in vec2 vert;
-    in vec2 texcoord;
-    out vec2 uvs;
+def open_shader(source_file: str) -> str:
+    with open(source_file, 'r') as file:
+        shader_code = file.read()
+    return shader_code
 
-    void main() {
-        uvs = texcoord;
-        gl_Position = vec4(vert, 0.0, 1.0);
-    }
-    """
 
-frag_shader = """
-    #version 330 core
+vert_shader = open_shader('shader_vert.glsl')
 
-    uniform sampler2D tex;
-
-    in vec2 uvs;
-    out vec4 f_color;
-
-    void main() {
-        f_color = vec4(texture(tex, uvs).rgb, 1.0);
-    }
-    """
+frag_shader = open_shader('shader_frag.glsl')
 
 program = context.program(vertex_shader=vert_shader,
                           fragment_shader=frag_shader)
@@ -72,6 +57,7 @@ def surf_to_texture(surf: pygame.Surface) -> moderngl.Texture:
     return tex
 
 
+t = 0.
 while True:
     display.fill((0, 0, 0))
     # display.blit(img, pygame.mouse.get_pos())
@@ -85,10 +71,11 @@ while True:
     frame_tex = surf_to_texture(display)
     frame_tex.use(0)
     program['tex'] = 0
+    program['time'] = t
     render_object.render(mode=moderngl.TRIANGLE_STRIP)
 
     pygame.display.flip()
 
     frame_tex.release()
-
+    t += 1.
     clock.tick(60)
