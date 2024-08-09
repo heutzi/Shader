@@ -3,7 +3,7 @@ import moderngl
 import pygame
 import sys
 
-DEFAULT_SCREEN_SIZE = (800, 600)
+DEFAULT_SCREEN_SIZE = (600, 600)
 
 pygame.init()
 screen = pygame.display.set_mode(
@@ -13,7 +13,7 @@ screen = pygame.display.set_mode(
 display = pygame.Surface((DEFAULT_SCREEN_SIZE))
 context = moderngl.create_context()
 clock = pygame.time.Clock()
-image = pygame.image.load('images/image.jpeg')
+image = pygame.image.load('images/white_screen.jpg')
 image = pygame.transform.scale(image, DEFAULT_SCREEN_SIZE)
 
 quad_buffer = context.buffer(data=array('f', [
