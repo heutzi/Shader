@@ -3,6 +3,8 @@ import moderngl
 import pygame
 import sys
 
+from modules.image_to_texture import surf_to_texture
+
 DEFAULT_SCREEN_SIZE = (600, 600)
 
 pygame.init()
@@ -13,7 +15,7 @@ screen = pygame.display.set_mode(
 display = pygame.Surface((DEFAULT_SCREEN_SIZE))
 context = moderngl.create_context()
 clock = pygame.time.Clock()
-image = pygame.image.load('images/white_screen.jpg')
+image = pygame.image.load('images/blue_noise.jpg')
 image = pygame.transform.scale(image, DEFAULT_SCREEN_SIZE)
 
 quad_buffer = context.buffer(data=array('f', [
@@ -37,7 +39,7 @@ def open_shader(source_file: str) -> str:
 
 vert_shader = open_shader('shader_vert.glsl')
 
-frag_shader = open_shader('shader_frag.glsl')
+frag_shader = open_shader('shader_frag_bw.glsl')
 
 program = context.program(vertex_shader=vert_shader,
                           fragment_shader=frag_shader)
@@ -45,17 +47,6 @@ render_object = context.vertex_array(
     program,
     [(quad_buffer, '2f 2f', 'vert', 'texcoord')]
     )
-
-
-def surf_to_texture(surf: pygame.Surface) -> moderngl.Texture:
-    tex = context.texture(surf.get_size(), 4)
-    # defines interpollation
-    tex.filter = (moderngl.NEAREST, moderngl.NEAREST)
-    # defines how the channels are mapped to each other
-    tex.swizzle = 'BGRA'
-    tex.write(surf.get_view('1'))
-    return tex
-
 
 t = 0.
 while True:
@@ -68,10 +59,10 @@ while True:
             pygame.quit()
             sys.exit()
 
-    frame_tex = surf_to_texture(display)
+    frame_tex = surf_to_texture(display, context)
     frame_tex.use(0)
     program['tex'] = 0
-    program['time'] = t
+    # program['time'] = t
     render_object.render(mode=moderngl.TRIANGLE_STRIP)
 
     pygame.display.flip()
