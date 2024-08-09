@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+imageio = "==2.34.2"
 moderngl = "==5.10.0"
 pygame = "==2.6.0"
 

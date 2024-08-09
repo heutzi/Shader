@@ -14,6 +14,9 @@ float average(in vec3 v3){
 void main() {
     vec3 sampled_image = texture(tex_image, uvs).rgb;
     vec3 sampled_noise = texture(tex_noise, uvs).rgb;
-    float avg = average(sampled_col);
-    f_color = vec4(vec3(avg),  1.0);
+    float avg_image = average(sampled_image);
+    float avg_noise = average(sampled_noise);
+    float d = step(avg_noise, avg_image);
+    avg_image *= d;
+    f_color = vec4(vec3(avg_image),  1.0);
 }

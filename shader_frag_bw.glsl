@@ -1,6 +1,6 @@
 #version 330 core
 
-uniform sampler2D tex;
+uniform sampler2D tex_image;
 uniform float time;
 
 in vec2 uvs;
@@ -11,7 +11,7 @@ float average(in vec3 v3){
 }
 
 void main() {
-    vec3 sampled_col = texture(tex, uvs).rgb;
+    vec3 sampled_col = texture(tex_image, uvs).rgb;
     float avg = average(sampled_col);
     f_color = vec4(vec3(avg),  1.0);
 }
