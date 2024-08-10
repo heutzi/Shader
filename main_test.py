@@ -68,6 +68,8 @@ while True:
     program['tex_noise'] = 1
 
     # program['time'] = t
+    # program['screen_width'] = DEFAULT_SCREEN_SIZE[1]
+
     render_object.render(mode=moderngl.TRIANGLE_STRIP)
 
     pygame.display.flip()
